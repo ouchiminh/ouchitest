@@ -18,7 +18,7 @@ void test_name::test()
 
 #define FAIL_LOG(expr, ...) do       \
 {                                               \
-error("assertion \"", #expr, "\" failed.");     \
+error("\nassertion \"", #expr, "\" failed.");   \
 log("(", __FILE__,":",__LINE__,")\n");          \
 log("reason : ", __VA_ARGS__, "\n\n");          \
 } while(false);
