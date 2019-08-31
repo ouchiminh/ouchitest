@@ -16,7 +16,7 @@ private:                                        \
 } test_name##_instance;                         \
 void test_name::test()
 
-#define FAIL_LOG(expr, ...) do       \
+#define FAIL_LOG(expr, ...) do                  \
 {                                               \
 error("\nassertion \"", #expr, "\" failed.");   \
 log("(", __FILE__,":",__LINE__,")\n");          \
@@ -46,6 +46,14 @@ STD_EXCEPTION(expr)                             \
 UNKNOWN_EXCEPTION(expr)                         \
 } while(false)
 
+#define OUCHI_REQUIRE_TRUE(expr) do{            \
+if (!(expr)) {                                  \
+    FAIL_LOG(expr, "\""                         \
+             #expr "\" evaluated to false");    \
+    return;                                     \
+}                                               \
+} while(false)
+
 #define OUCHI_CHECK_EQUAL(expr, expect) do{     \
 try{                                            \
     auto result = (expr);                       \
@@ -57,6 +65,16 @@ try{                                            \
 }                                               \
 STD_EXCEPTION(expr)                             \
 UNKNOWN_EXCEPTION(expr)                         \
+} while(false)
+
+#define OUCHI_REQUIRE_EQUAL(expr, expect) do{   \
+auto result = (expr);                           \
+auto ex = (expect);                             \
+if ((result) != (ex)) {                         \
+    FAIL_LOG(expr, "\n\texpected value is ", ex,\
+             "\n\tactual value is   ", (result))\
+    return;                                     \
+}                                               \
 } while(false)
 
 #define OUCHI_CHECK_NOTHROW(expr) do{           \
