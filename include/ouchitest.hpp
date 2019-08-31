@@ -16,89 +16,65 @@ private:                                        \
 } test_name##_instance;                         \
 void test_name::test()
 
+#define FAIL_LOG(expr, ...) do       \
+{                                               \
+error("assertion \"", #expr, "\" failed.");     \
+log("(", __FILE__,":",__LINE__,")\n");          \
+log("reason : ", __VA_ARGS__, "\n\n");          \
+} while(false);
+
+#define UNKNOWN_EXCEPTION(expr)                 \
+catch(...){                                     \
+    FAIL_LOG(expr,                              \
+             "an unknown exception was thrown");\
+}
+
+#define STD_EXCEPTION(expr)                     \
+catch(std::exception& e){                       \
+    FAIL_LOG(expr, "an exception thrown. ",     \
+             e.what());                         \
+}
+
 #define OUCHI_CHECK_TRUE(expr) do{              \
 try{                                            \
     if (!(expr)) {                              \
-        error("assersion \"",                   \
-              #expr, "\"failed. (",             \
-              __FILE__,":",__LINE__,")"         \
-              "\nreason : "                     \
-              "evaluated to false.\n\n");       \
+        FAIL_LOG(expr, "\""                     \
+                 #expr "\" evaluated to false");\
     }                                           \
-} catch (std::exception& e) {                   \
-    error("assertion \"", #expr, "\"failed. (", \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : exception thrown. ",        \
-          e.what(), "\n\n");                    \
-} catch(...){                                   \
-    error("assersion \"",                       \
-          #expr, "\"failed. (",                 \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : unknown exception thrown.", \
-          "\n\n");                              \
 }                                               \
+STD_EXCEPTION(expr)                             \
+UNKNOWN_EXCEPTION(expr)                         \
 } while(false)
 
 #define OUCHI_CHECK_EQUAL(expr, expect) do{     \
 try{                                            \
-    if ((expr) != (expect)) {                   \
-        error("assersion \"",                   \
-              #expr, "\"failed. (",             \
-              __FILE__,":",__LINE__,")"         \
-              "\nreason : "                     \
-              "the expression was evaluated to ",\
-              (expr), "\n\tbut expected was ",  \
-              (expect), ".\n\n");               \
+    auto result = (expr);                       \
+    auto ex = (expect);                         \
+    if ((result) != (ex)) {                     \
+        FAIL_LOG(expr, "\n\texpected value is ", ex,   \
+                 "\n\tactual value is   ", (result))   \
     }                                           \
-} catch (std::exception& e) {                   \
-    error("assersion \"",                       \
-          #expr, "\"failed. (",                 \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : exception thrown. ",        \
-          e.what(), "\n\n");                    \
-} catch(...){                                   \
-    error("assersion \"",                       \
-          #expr, "\"failed. (",                 \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : unknown exception thrown.", \
-          "\n\n");                              \
 }                                               \
+STD_EXCEPTION(expr)                             \
+UNKNOWN_EXCEPTION(expr)                         \
 } while(false)
 
 #define OUCHI_CHECK_NOTHROW(expr) do{           \
 try {                                           \
     (expr);                                     \
-} catch (std::exception& e) {                   \
-    error("assersion \"",                       \
-          #expr, "\"failed. (",                 \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : exception was thrown. ",    \
-          e.what(), "\n\n");                    \
-} catch(...){                                   \
-    error("assersion \"",                       \
-          #expr, "\"failed. (",                 \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : unknown exception thrown.", \
-          "\n\n");                              \
 }                                               \
+STD_EXCEPTION(expr)                             \
+UNKNOWN_EXCEPTION(expr)                         \
 } while(false)
 
 #define OUCHI_CHECK_THROW(expr, exception_type) \
 do{                                             \
 try {                                           \
     (expr);                                     \
-    error("assersion \"",                       \
-          #expr, "\"failed. (",                 \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : no exception thrown.\n\n"); \
+    FAIL_LOG(expr, #exception_type,             \
+    " was expected. but no exception was thrown.");\
 } catch (exception_type){}                      \
-catch(...) {                                    \
-    error("assersion \"",                       \
-          #expr, "\"failed. (",                 \
-          __FILE__,":",__LINE__,")\n"           \
-          "reason : unknown exception thrown.", \
-          "\n\n");                              \
-}                                               \
+UNKNOWN_EXCEPTION(expr)                         \
 } while(false)
 
 #define OUCHI_TEST_MAIN                         \

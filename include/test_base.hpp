@@ -59,7 +59,8 @@ protected:
     void error(MaybePrintable&& ...args)
     {
         ++fail_count_;
-        log("in \"", name_, "\"\n");
+        log("in ");
+        error_s(name_);
         error_s(std::forward<MaybePrintable>(args)...);
     }
     template<class ...MaybePrintable>
@@ -67,7 +68,6 @@ protected:
     {
         (log(std::forward<MaybePrintable>(args)), ...);
     }
-private:
     template<class Printable>
     static void log(Printable&& value)
     {
@@ -75,7 +75,6 @@ private:
         print(std::forward<Printable>(value));
     }
 
-protected:
     inline static std::list<test_base*> test_cases;
     std::string_view name_;
     unsigned fail_count_;
