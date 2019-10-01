@@ -19,7 +19,7 @@ public:
     /// </summary>
     /// <returns>error count</returns>
     virtual void test() = 0;
-    static void test_all()
+    static unsigned test_all()
     {
         unsigned failed_assertion = 0;
         unsigned failed_case = 0;
@@ -46,6 +46,7 @@ public:
         ccol concol;
         concol.set_color(failed_case ? ccol::foreground_red : ccol::foreground_green);
         std::cout << failed_assertion << " assertions are error in " << failed_case << " test cases.\n";
+        return failed_case;
     }
 protected:
     template<class ...MaybePrintable>

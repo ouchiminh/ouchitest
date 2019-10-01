@@ -97,5 +97,5 @@ UNKNOWN_EXCEPTION(expr)                         \
 
 #define OUCHI_TEST_MAIN                         \
 int main() {                                    \
-    ouchi::test::test_base::test_all();         \
+    return ouchi::test::test_base::test_all();  \
 }
