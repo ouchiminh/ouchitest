@@ -1,4 +1,8 @@
 ﻿#pragma once
+#if !defined
+#   define WIN32_LEAN_AND_MEAN
+#   define NOMINMAX
+#endif
 #include <exception>
 #include "test_base.hpp"
 
