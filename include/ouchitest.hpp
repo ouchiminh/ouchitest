@@ -1,6 +1,8 @@
 ﻿#pragma once
-#if !defined
+#if !defined WIN32_LEAN_AND_MEAN 
 #   define WIN32_LEAN_AND_MEAN
+#endif
+#if !defined NOMINMAX 
 #   define NOMINMAX
 #endif
 #include <exception>
