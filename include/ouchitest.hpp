@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #if !defined WIN32_LEAN_AND_MEAN 
 #   define WIN32_LEAN_AND_MEAN
 #endif
@@ -15,7 +15,7 @@ public:                                         \
     test_name()                                 \
         : test_base(#test_name)                 \
     {                                           \
-        test_cases.push_back(this);             \
+        test_cases().push_back(this);           \
     }                                           \
     void test() override final;                 \
 private:                                        \
