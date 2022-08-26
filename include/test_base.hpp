@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <iostream>
 #include <list>
 #include <string_view>
@@ -10,7 +10,7 @@ namespace ouchi::test {
 class test_base {
 public:
     test_base() = delete;
-    constexpr test_base(std::string_view testname)
+    test_base(std::string_view testname)
         : name_(testname)
         , fail_count_{ 0 }
     {}
@@ -23,8 +23,8 @@ public:
     {
         unsigned failed_assertion = 0;
         unsigned failed_case = 0;
-        std::cout << "running " << test_cases.size() << " test cases.\n\n";
-        for (auto* test_case : test_cases) {
+        std::cout << "running " << test_cases().size() << " test cases.\n\n";
+        for (auto* test_case : test_cases()) {
             // error message is displayed in test()
             unsigned f;
             try {
@@ -76,7 +76,10 @@ protected:
         print(std::forward<Printable>(value));
     }
 
-    inline static std::list<test_base*> test_cases;
+    static std::list<test_base*>& test_cases() {
+        static std::list<test_base*> test_cases_;
+        return test_cases_;
+    }
     std::string_view name_;
     unsigned fail_count_;
 };
