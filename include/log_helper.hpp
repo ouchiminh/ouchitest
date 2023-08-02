@@ -21,7 +21,7 @@ static_assert(!is_printable_v<void>);
 
 template<class T, bool = is_printable_v<T>>
 struct printer {
-    void operator()(...) { std::cout << "{unprintable}"; }
+    void operator()(const T&) { std::cout << "{unprintable}"; }
 };
 
 template<class T>
