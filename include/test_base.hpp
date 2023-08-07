@@ -24,19 +24,22 @@ public:
         unsigned failed_assertion = 0;
         unsigned failed_case = 0;
         std::cout << "running " << test_cases().size() << " test cases.\n\n";
-        for (auto* test_case : test_cases()) {
+        for (size_t i = 0; i < test_cases().size(); ++i) {
+            // display current test case
+            auto* test_case = *std::next(test_cases().begin(), i);
+            std::cout << '\r' << std::string(80, ' ') << '\r' << i + 1 << '/' << test_cases().size() << ' ' << test_case->name_ << " ..." << std::flush;
             // error message is displayed in test()
             unsigned f;
             try {
                 test_case->test();
                 f = test_case->fail_count_;
             } catch (std::exception& e) {
-                error_s("An exception thrown in ", test_case->name_, ".",
+                error_s("\nAn exception thrown in ", test_case->name_, ".",
                       "what() : ", e.what(), "\n\n");
                 ++failed_case;
                 continue;
             } catch (...) {
-                error_s("Unknown exception thrown in ", test_case->name_, ".\n\n");
+                error_s("\nUnknown exception thrown in ", test_case->name_, ".\n\n");
                 ++failed_case;
                 continue;
             }
@@ -45,7 +48,7 @@ public:
         }
         ccol concol;
         concol.set_color(failed_case ? ccol::foreground_red : ccol::foreground_green);
-        std::cout << failed_assertion << " assertions are error in " << failed_case << " test cases.\n";
+        std::cout << '\r' << failed_assertion << " assertions are error in " << failed_case << " test cases.\n";
         return failed_case;
     }
 protected:
@@ -60,7 +63,7 @@ protected:
     void error(MaybePrintable&& ...args)
     {
         ++fail_count_;
-        log("in ");
+        log("\nin ");
         error_s(name_);
         error_s(std::forward<MaybePrintable>(args)...);
     }
