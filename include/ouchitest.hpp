@@ -62,11 +62,11 @@ if (!(expr)) {                                  \
 
 #define OUCHI_CHECK_EQUAL(expr, expect) do{     \
 try{                                            \
-    auto result = (expr);                       \
-    auto ex = (expect);                         \
-    if ((result) != (ex)) {                     \
-        FAIL_LOG(expr, "\n\texpected value is ", ex,   \
-                 "\n\tactual value is   ", (result))   \
+    auto _result = (expr);                      \
+    auto _ex = (expect);                        \
+    if ((_result) != (_ex)) {                   \
+        FAIL_LOG(expr, "\n\texpected value is ", _ex,   \
+                 "\n\tactual value is   ", (_result))   \
     }                                           \
 }                                               \
 STD_EXCEPTION(expr)                             \
@@ -74,11 +74,11 @@ UNKNOWN_EXCEPTION(expr)                         \
 } while(false)
 
 #define OUCHI_REQUIRE_EQUAL(expr, expect) do{   \
-auto result = (expr);                           \
-auto ex = (expect);                             \
-if ((result) != (ex)) {                         \
-    FAIL_LOG(expr, "\n\texpected value is ", ex,\
-             "\n\tactual value is   ", (result))\
+auto _result = (expr);                          \
+auto _ex = (expect);                            \
+if ((_result) != (_ex)) {                       \
+    FAIL_LOG(expr, "\n\texpected value is ", _ex,\
+             "\n\tactual value is   ", (_result))\
     return;                                     \
 }                                               \
 } while(false)
