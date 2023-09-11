@@ -20,7 +20,7 @@ public:                                         \
     void test() override final;                 \
 private:                                        \
 } test_name##_instance;                         \
-void test_name::test()
+inline void test_name::test()
 
 #define FAIL_LOG(expr, ...) do                  \
 {                                               \
