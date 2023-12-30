@@ -1,6 +1,6 @@
-﻿#pragma once
+#pragma once
 
-#ifdef __linux__
+#if !__has_include(<Windows.h>)
 #include <cstdio>
 namespace ouchi::test {
 
